@@ -6,6 +6,8 @@ $(document).ready(function() {
 
 	// global variable for our data, because Tom said it was ok
 	chapter_list = [];
+	accentColor = "#FF3D8B";
+	darkColor = "black";
 
 	$.getJSON("http://spreadsheets.google.com/feeds/list/0ArWU2T0HEMrldGxLeHVFYmM2VVhvMktFRVJwVGtVOHc/od6/public/values?alt=json-in-script&callback=?",
 		function(data) {
@@ -32,27 +34,30 @@ $(document).ready(function() {
 		// params: x, y, width, height
 		var paper = new Raphael(document.getElementById("canvas"), $("#canvas").width(), $("#canvas").height());
 
+		// generate graphs
+		// params: paper, xpos, ypos, chapterID
 		graphGender(paper, 80, 50, 0);
+		graphGrants(paper, 80, 200, 0);
 	}
 
 	// graph the men and women of each chapter, compared to the global average
-	var graphGender = function(paper, xpos, ypos, chapterNum) {
+	var graphGender = function(paper, xpos, ypos, chapterID) {
 		var numChapters = chapter_list.length;
 		
 		// create a stacked bar chart of our data
 		// params: paper, x, y, width, height, [ [values1], [values2] ], opts
 		chart = paper.hbarchart(xpos,ypos,200,100, [
-					[chapter_list[chapterNum]["men"], chapter_list[numChapters-1]["men"]],
-					[chapter_list[chapterNum]["women"], chapter_list[numChapters-1]["women"]]
+					[chapter_list[chapterID]["men"], chapter_list[numChapters-1]["men"]],
+					[chapter_list[chapterID]["women"], chapter_list[numChapters-1]["women"]]
 					], {
 					stacked: true,
-					colors: ["blue", "#FF3D8B"]
+					colors: [darkColor, accentColor]
 				});
 		
 		// add text labels
 		// params: x, y, text (use \n for line breaks)
 		var title = paper.text(xpos+50, ypos - 15, "Men vs. Women");
-		var label1 = paper.text(xpos-40, ypos+25, chapter_list[chapterNum]["name"]);
+		var label1 = paper.text(xpos-40, ypos+25, chapter_list[chapterID]["name"]);
 		var label2 = paper.text(xpos-40, ypos+69, "Average");
 		title.attr({ "font-size": 24 });
 		label1.attr({ "font-size": 16 });
@@ -69,5 +74,49 @@ $(document).ready(function() {
 			    this.flag.animate({opacity: 0}, 300, function () {this.remove();});
 			}
 		);
+	}
+
+	// graph the number of grants funded by a chapter
+	var graphGrants = function(paper, xpos, ypos, chapterID) {
+		// get the total number of grants awarded
+		var numChapters = chapter_list.length;
+		var localGrants = chapter_list[chapterID]["grants"];
+		var totalGrants = chapter_list[numChapters-1]["grants"];
+
+		// position and size of rectangles
+		var box;
+		var newx;
+		var newy;
+		var side = 10;
+		var spacer = 5;
+		var rowLength = 20; // number of rectangles per row
+
+		for (i=0;i<totalGrants;i++) {
+			newx = xpos + (i%rowLength)*(side + spacer);
+			newy = ypos + Math.floor(i/rowLength)*(side + spacer);
+
+			box = paper.rect(newx, newy, side, side);
+			if (i<localGrants) {
+				box.attr({ fill: accentColor, stroke: "none", title: "grant" });
+			} else {
+				box.attr({ fill: darkColor, stroke: "none"});
+			}
+		}
+
+		// add text labels and tooltips
+		// params: x, y, text (use \n for line breaks)
+		var title = paper.text(xpos+50, ypos - 20, "Grants Awarded");
+		title.attr({ "font-size": 24 });
+		addTooltips();
+	}
+
+	var addTooltips = function() {
+		// add tooltips
+		$("#canvas a").qtip({
+			style: {
+				tip: true,
+				classes: 'ui-tooltip-tipsy ui-tooltip-shadow'
+			}
+		});
 	}
 });
