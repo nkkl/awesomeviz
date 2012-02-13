@@ -36,19 +36,19 @@ $(document).ready(function() {
 			    chapter_list.push(chapter);
 			}
 
-			displayData();
+			displayData(1);
 	});
 
-	var displayData = function() {
+	var displayData = function(chapterID) {
 		// create our canvas
 		// params: x, y, width, height
 		var paper = new Raphael(document.getElementById("canvas"), $("#canvas").width(), $("#canvas").height());
 
 		// generate graphs
 		// params: paper, xpos, ypos, chapterID
-		graphGender(paper, 80, 50, 1);
-		graphGrants(paper, 80, 200, 1);
-		graphOccupations(paper, 500, 50, 1);
+		graphGender(paper, 80, 50, chapterID);
+		graphGrants(paper, 80, 200, chapterID);
+		graphOccupations(paper, 500, 50, chapterID);
 	}
 
 	// graph the men and women of each chapter, compared to the global average
@@ -113,10 +113,7 @@ $(document).ready(function() {
 			occupations[i] = Math.round((occupations[i]/total)*250);
 			console.log(occupations[i]);
 
-			box = paper.rect(xpos, newy, width, occupations[i]);
-			box.attr({ fill: accentColor, stroke: "none", title: occupations[i]/2.50 + "%" });
-
-			// place label
+			// choose label
 			switch(i) {
 				case 0:
 					labelText = "entrepreneurship";
@@ -134,11 +131,26 @@ $(document).ready(function() {
 					labelText = "other";
 			}
 
-			label = paper.text(xpos + 50, newy + occupations[i] - 8, labelText);
-			label.attr({ "font-size": 16, "text-anchor": "start" });
+			if (occupations[i] === 0) {
+				box = paper.rect(xpos, newy, width, 10);
+				box.attr({ fill: baseColor, stroke: "none", title: "0%" })
+				
+				label = paper.text(xpos + 50, newy + 2, labelText);
+				label.attr({ "font-size": 16, "text-anchor": "start" });
 
-			// increment y position
-			newy = newy + spacer + occupations[i];
+				// increment y position
+				newy = newy + spacer + 10;
+			} else {
+				box = paper.rect(xpos, newy, width, occupations[i]);
+				box.attr({ fill: accentColor, stroke: "none", title: occupations[i]/2.50 + "%" });
+				
+				label = paper.text(xpos + 50, newy + occupations[i] - 8, labelText);
+				label.attr({ "font-size": 16, "text-anchor": "start" });
+				
+				// increment y position
+				newy = newy + spacer + occupations[i];
+			}
+
 		}
 
 		// add text labels and tooltips
