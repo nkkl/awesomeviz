@@ -32,34 +32,42 @@ $(document).ready(function() {
 		// params: x, y, width, height
 		var paper = new Raphael(document.getElementById("canvas"), $("#canvas").width(), $("#canvas").height());
 
-		console.log(chapter_list[0]["women"]);
-		console.log(chapter_list[2]["women"]);
-		console.log(chapter_list[0]["men"]);
-		console.log(chapter_list[2]["men"]);
+		graphGender(paper, 80, 50, 0);
+	}
 
+	// graph the men and women of each chapter, compared to the global average
+	var graphGender = function(paper, xpos, ypos, chapterNum) {
+		var numChapters = chapter_list.length;
+		
 		// create a stacked bar chart of our data
-		// params: x, y, width, height, [ [values1], [values2] ]
-		chart = paper.hbarchart(100,100,200,100,[ [chapter_list[0]["women"], chapter_list[2]["women"]], [chapter_list[0]["men"], chapter_list[2]["men"]] ], {stacked: true});
+		// params: paper, x, y, width, height, [ [values1], [values2] ], opts
+		chart = paper.hbarchart(xpos,ypos,200,100, [
+					[chapter_list[chapterNum]["men"], chapter_list[numChapters-1]["men"]],
+					[chapter_list[chapterNum]["women"], chapter_list[numChapters-1]["women"]]
+					], {
+					stacked: true,
+					colors: ["blue", "#FF3D8B"]
+				});
+		
+		// add text labels
+		// params: x, y, text (use \n for line breaks)
+		var title = paper.text(xpos+50, ypos - 15, "Men vs. Women");
+		var label1 = paper.text(xpos-40, ypos+25, chapter_list[chapterNum]["name"]);
+		var label2 = paper.text(xpos-40, ypos+69, "Average");
+		title.attr({ "font-size": 24 });
+		label1.attr({ "font-size": 16 });
+		label2.attr({ "font-size": 16 });
 
 		// create a hover function
 		chart.hover(
 			function() {
-				console.log(this);
 				// create a popup element on top of the bar
-		        this.flag = paper.popup(this.bar.x, this.bar.y-10, (this.bar.value || "0") + " people").insertBefore(this);
+		        this.flag = paper.popup(this.bar.x, this.bar.y-10, (this.bar.value || "0") + "").insertBefore(this);
 			    },
 			function() {
 			    // hide the popup element with an animation and remove the popup element at the end
 			    this.flag.animate({opacity: 0}, 300, function () {this.remove();});
 			}
 		);
-
-		// add tooltips
-		$("#canvas a").qtip({
-			style: {
-				tip: true,
-				classes: 'ui-tooltip-tipsy ui-tooltip-shadow'
-			}
-		});
 	}
 });
