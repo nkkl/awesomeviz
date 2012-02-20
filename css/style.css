@@ -1,0 +1,23 @@
+/*
+// CSS source for Awesome Foundation information visualization project
+// http://www.awesomefoundation.org
+// http://github.com/nkkl/awesomeviz
+*/
+
+html {}
+
+body {}
+
+#worldMap {
+	width: 900px;
+	height: 400px;
+	margin: auto;
+	background: url("../img/worldmap.png") no-repeat center;
+}
+
+#canvas {
+	width: 800px;
+	height: 400px;
+	margin: auto;
+	border: 1px solid black;
+}
