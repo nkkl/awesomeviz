@@ -36,53 +36,113 @@ $(document).ready(function() {
 			    chapter_list.push(chapter);
 			}
 
+			// create our canvas
+			// params: x, y, width, height
+			paper = new Raphael(document.getElementById("canvas"), $("#canvas").width(), $("#canvas").height());
+	
 			displayData(1);
 	});
 
+	$("#canvas").click(function() {
+		// currently, do nothing
+	});
+
 	var displayData = function(chapterID) {
-		// create our canvas
-		// params: x, y, width, height
-		var paper = new Raphael(document.getElementById("canvas"), $("#canvas").width(), $("#canvas").height());
 
 		// generate graphs
 		// params: paper, xpos, ypos, chapterID
-		graphGender(paper, 80, 50, chapterID);
-		graphGrants(paper, 80, 200, chapterID);
-		graphOccupations(paper, 500, 50, chapterID);
+		graphGender(paper, 0, 0, chapterID);
+		graphGrants(paper, 0, 200, chapterID);
+		graphOccupations(paper, 250, 0, chapterID);
 	}
 
 	// graph the men and women of each chapter, compared to the global average
 	var graphGender = function(paper, xpos, ypos, chapterID) {
-		// create a stacked bar chart of our data
-		// params: paper, x, y, width, height, [ [values1], [values2] ], opts
-		chart = paper.hbarchart(xpos,ypos,200,100, [
-					[chapter_list[chapterID]["men"], chapter_list[0]["men"]],
-					[chapter_list[chapterID]["women"], chapter_list[0]["women"]]
-					], {
-					stacked: true,
-					colors: [baseColor, accentColor]
-				});
-		
-		// add text labels
-		// params: x, y, text (use \n for line breaks)
-		var title = paper.text(xpos, ypos - 15, "Men vs. Women");
-		var label1 = paper.text(xpos-10, ypos+25, chapter_list[chapterID]["name"]);
-		var label2 = paper.text(xpos-10, ypos+69, "Average");
-		title.attr({ "font-size": 24, "text-anchor": "start" });
-		label1.attr({ "font-size": 16, "text-anchor": "end" });
-		label2.attr({ "font-size": 16, "text-anchor": "end" });
+		// parameter definitions
+		var box;
+		var newx = xpos;
+		var newy = ypos + 25;
+		var width = 200;
+		var boxHeight = 50;
 
-		// create a hover function
-		chart.hover(
-			function() {
-				// create a popup element on top of the bar
-		        this.flag = paper.popup(this.bar.x, this.bar.y-10, (this.bar.value || "0") + "").insertBefore(this);
-			    },
-			function() {
-			    // hide the popup element with an animation and remove the popup element at the end
-			    this.flag.animate({opacity: 0}, 300, function () {this.remove();});
+		// get the number of men and women in this chapter and globally
+		var women = chapter_list[chapterID]["women"];
+		var men = chapter_list[chapterID]["men"];
+		var womenGlobal = chapter_list[0]["women"];
+		var menGlobal = chapter_list[0]["men"];
+		
+		// find the size of the largest chapter for use as a scale factor
+		var largestChapter = 0;
+
+		for (index in chapter_list) {
+			var size = chapter_list[index]["women"] + chapter_list[index]["men"];
+
+			if (largestChapter < size) {
+				largestChapter = chapter_list[index]["women"] + chapter_list[index]["men"];
 			}
-		);
+		}
+
+		// TODO: REFACTOR THIS
+		// graph men and women in this chapter
+		box = paper.rect(newx, newy, Math.round(width * men/largestChapter), boxHeight);
+		box.attr({ fill: baseColor, stroke: "none", title: men + " men" })
+		newx += Math.round(width * men/largestChapter);
+		box = paper.rect(newx, newy, Math.round(width * women/largestChapter), boxHeight);
+		box.attr({ fill: accentColor, stroke: "none", title: women + " women" });
+		// add a label
+		var label1 = paper.text(xpos+5, newy+25, chapter_list[chapterID]["name"]);
+		
+		// reset x position!
+		newx = xpos;
+		newy += boxHeight + 25;
+		box = paper.rect(newx, newy, Math.round(width * menGlobal/largestChapter), boxHeight);
+		box.attr({ fill: baseColor, stroke: "none", title: men + " men"});
+		newx += Math.round(width * menGlobal/largestChapter);
+		box = paper.rect(newx, newy, Math.round(width * womenGlobal/largestChapter), boxHeight);
+		box.attr({ fill: accentColor, stroke: "none", title: womenGlobal + " women" });
+		// add a label
+		var label2 = paper.text(xpos+5, newy+25, "Average");
+
+		// add text labels and tooltips
+		// params: x, y, text (use \n for line breaks)
+		var title = paper.text(xpos, ypos+12, "Men vs. Women");
+		title.attr({ "font-size": 24, "text-anchor": "start" });
+		label1.attr({ "font-size": 16, "text-anchor": "start", fill: "white" });
+		label2.attr({ "font-size": 16, "text-anchor": "start", fill: "white" });
+		addTooltips();
+	}
+
+	// graph the number of grants funded by a chapter
+	var graphGrants = function(paper, xpos, ypos, chapterID) {
+		// get the total number of grants awarded
+		var localGrants = chapter_list[chapterID]["grants"];
+		var totalGrants = chapter_list[0]["grants"];
+
+		// position and size of rectangles
+		var box;
+		var newx;
+		var newy = ypos + 20;
+		var side = 15;
+		var spacer = 5;
+		var rowLength = 10; // number of rectangles per row
+
+		for (i=0;i<totalGrants;i++) {
+			newx = xpos + (i%rowLength)*(side + spacer);
+			newy = ypos + Math.floor(i/rowLength)*(side + spacer);
+
+			box = paper.circle(newx + side/2, newy, side/2);
+			if (i<localGrants) {
+				box.attr({ fill: accentColor, stroke: "none", title: "grant" });
+			} else {
+				box.attr({ fill: baseColor, stroke: "none"});
+			}
+		}
+
+		// add text labels and tooltips
+		// params: x, y, text (use \n for line breaks)
+		var title = paper.text(xpos, ypos - 20, "Grants Awarded");
+		title.attr({ "font-size": 24, "text-anchor": "start" });
+		addTooltips();
 	}
 
 	// graph the occupations of each chapter
@@ -96,22 +156,26 @@ $(document).ready(function() {
 		occupations[4] = chapter_list[chapterID]["other"];
 		var total = 0;
 
+		var percent = [];
+
 		for (i=0;i<occupations.length;i++) {
 			total += occupations[i];
 		}
 
 		// position and size of rectangle
 		var box;
-		var newy = ypos;
+		var newy = ypos + 25;
 		var width = 40;
 		var spacer = 3;
 		var label;
 		var labelText;
 
+		var height = 400;
+
 		// normalize values and graph rectangles
 		for (i=0;i<occupations.length;i++) {
-			occupations[i] = Math.round((occupations[i]/total)*250);
-			console.log(occupations[i]);
+			percent[i] = Math.round(occupations[i]/total * 1000)/10;
+			occupations[i] = Math.round((occupations[i]/total)*height);
 
 			// choose label
 			switch(i) {
@@ -142,7 +206,7 @@ $(document).ready(function() {
 				newy = newy + spacer + 10;
 			} else {
 				box = paper.rect(xpos, newy, width, occupations[i]);
-				box.attr({ fill: accentColor, stroke: "none", title: occupations[i]/2.50 + "%" });
+				box.attr({ fill: accentColor, stroke: "none", title: percent[i] + "%" });
 				
 				label = paper.text(xpos + 50, newy + occupations[i] - 8, labelText);
 				label.attr({ "font-size": 16, "text-anchor": "start" });
@@ -155,40 +219,7 @@ $(document).ready(function() {
 
 		// add text labels and tooltips
 		// params: x, y, text (use \n for line breaks)
-		var title = paper.text(xpos, ypos - 20, "Trustee Occupations");
-		title.attr({ "font-size": 24, "text-anchor": "start" });
-		addTooltips();
-	}
-
-	// graph the number of grants funded by a chapter
-	var graphGrants = function(paper, xpos, ypos, chapterID) {
-		// get the total number of grants awarded
-		var localGrants = chapter_list[chapterID]["grants"];
-		var totalGrants = chapter_list[0]["grants"];
-
-		// position and size of rectangles
-		var box;
-		var newx;
-		var newy;
-		var side = 15;
-		var spacer = 2;
-		var rowLength = 20; // number of rectangles per row
-
-		for (i=0;i<totalGrants;i++) {
-			newx = xpos + (i%rowLength)*(side + spacer);
-			newy = ypos + Math.floor(i/rowLength)*(side + spacer);
-
-			box = paper.rect(newx, newy, side, side);
-			if (i<localGrants) {
-				box.attr({ fill: accentColor, stroke: "none", title: "grant" });
-			} else {
-				box.attr({ fill: baseColor, stroke: "none"});
-			}
-		}
-
-		// add text labels and tooltips
-		// params: x, y, text (use \n for line breaks)
-		var title = paper.text(xpos, ypos - 20, "Grants Awarded");
+		var title = paper.text(xpos, ypos + 12, "Trustee Occupations");
 		title.attr({ "font-size": 24, "text-anchor": "start" });
 		addTooltips();
 	}

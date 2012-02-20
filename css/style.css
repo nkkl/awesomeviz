@@ -8,16 +8,24 @@ html {}
 
 body {}
 
-#worldMap {
-	width: 900px;
-	height: 400px;
+#wrapper {
+	width: 1000px;
+	height: 100%;
 	margin: auto;
-	background: url("../img/worldmap.png") no-repeat center;
+	overflow: hidden;
+}
+
+#map {
+	float: left;
+	width: 450px;
+	height: 550px;
+	margin: auto;
+	background: url("../img/northAmerica.png") no-repeat center top;
 }
 
 #canvas {
-	width: 800px;
-	height: 400px;
+	float: right;
+	width: 500px;
+	height: 550px;
 	margin: auto;
-	border: 1px solid black;
 }
