@@ -1,5 +1,20 @@
-var displayData = function(chapterID) {
+// the master switch that controls everything!
+var displayData = function(chapterName) {
+	// look up ID by name
+	var chapterID;
+	for (i=0;i<chapter_list.length;i++) {
+		if (chapter_list[i]["name"] === chapterName) {
+			chapterID = i;
+		}
+	}
+
+	// get rid of anything that was there before
 	graphPaper.clear();
+	namePaper.clear();
+
+	// add our title
+	addTitling(namePaper, chapterID);
+
 	// generate graphs
 	// params: paper, xpos, ypos, chapterID
 	graphGender(graphPaper, 0, 0, chapterID);
@@ -7,12 +22,20 @@ var displayData = function(chapterID) {
 	graphOccupations(graphPaper, 250, 0, chapterID);
 }
 
+var addTitling = function(paper, chapterID) {
+	var mainTitle = paper.text(0, 25, "North America");
+	mainTitle.attr({ "font-size": 24, "text-anchor": "start" });
+
+	var localTitle = paper.text(500, 25, "Awesome " + chapter_list[chapterID]["name"]);
+	localTitle.attr({ "font-size": 24, "text-anchor": "start" });
+}
+
 // graph the men and women of each chapter, compared to the global average
 var graphGender = function(paper, xpos, ypos, chapterID) {
 	// parameter definitions
 	var box;
 	var newx = xpos;
-	var newy = ypos + 25;
+	var newy = ypos + 35;
 	var width = 200;
 	var boxHeight = 50;
 
@@ -34,32 +57,44 @@ var graphGender = function(paper, xpos, ypos, chapterID) {
 	}
 
 	// TODO: REFACTOR THIS
-	// graph men and women in this chapter
+	// graph men in this chapter
 	box = paper.rect(newx, newy, Math.round(width * men/largestChapter), boxHeight);
-	box.attr({ fill: baseColor, stroke: "none", title: men + " men" })
+	box.attr({ fill: mediumColor, stroke: "none", title: men + " men" });
 	newx += Math.round(width * men/largestChapter);
+	// label the men
+	var manLabel = paper.text(newx - 5, newy + 35, "m");
+	manLabel.attr({ "font-size": 16, "text-anchor": "end", fill: "white" });
+	// graph the women
 	box = paper.rect(newx, newy, Math.round(width * women/largestChapter), boxHeight);
-	box.attr({ fill: accentColor, stroke: "none", title: women + " women" });
-	// add a label
-	var label1 = paper.text(xpos+5, newy+25, chapter_list[chapterID]["name"]);
+	box.attr({ fill: darkColor, stroke: "none", title: women + " women" });
+	// label the women
+	if (women > 1) {
+		var womanLabel = paper.text(newx + Math.round(width * women/largestChapter) - 5, newy + 35, "w");
+		womanLabel.attr({ "font-size": 16, "text-anchor": "end", fill: "white" });
+	} else {
+		var womanLabel = paper.text(newx + 10, newy + 35, "w");
+		womanLabel.attr({ "font-size": 16, "text-anchor": "start" });
+	}
 	
+	// graph our global average
 	// reset x position!
 	newx = xpos;
-	newy += boxHeight + 25;
+	newy += boxHeight + 15;
 	box = paper.rect(newx, newy, Math.round(width * menGlobal/largestChapter), boxHeight);
-	box.attr({ fill: baseColor, stroke: "none", title: men + " men"});
+	box.attr({ fill: mediumColor, stroke: "none", title: menGlobal + " men"});
 	newx += Math.round(width * menGlobal/largestChapter);
 	box = paper.rect(newx, newy, Math.round(width * womenGlobal/largestChapter), boxHeight);
-	box.attr({ fill: accentColor, stroke: "none", title: womenGlobal + " women" });
-	// add a label
-	var label2 = paper.text(xpos+5, newy+25, "Average");
+	box.attr({ fill: darkColor, stroke: "none", title: womenGlobal + " women" });
+	// if you like it put a label on it
+	var avgLabel = paper.text(xpos + 5, newy+35, "global avg.");
+	avgLabel.attr({ "font-size": 16, "text-anchor": "start", fill: "white" });
+	var avgDesc = paper.text(width - 10, newy+35, "= " + (womenGlobal+menGlobal) + " trustees");
+	avgDesc.attr({ "font-size": 16, "text-anchor": "end" });
 
-	// add text labels and tooltips
+	// add graph label and tooltips
 	// params: x, y, text (use \n for line breaks)
-	var title = paper.text(xpos, ypos+12, "Men vs. Women");
+	var title = paper.text(xpos, ypos+12, "Men & Women");
 	title.attr({ "font-size": 24, "text-anchor": "start" });
-	label1.attr({ "font-size": 16, "text-anchor": "start", fill: "white" });
-	label2.attr({ "font-size": 16, "text-anchor": "start", fill: "white" });
 	addTooltips();
 }
 
@@ -83,9 +118,9 @@ var graphGrants = function(paper, xpos, ypos, chapterID) {
 
 		box = paper.circle(newx + side/2, newy, side/2);
 		if (i<localGrants) {
-			box.attr({ fill: accentColor, stroke: "none", title: "grant" });
+			box.attr({ fill: darkColor, stroke: "none", title: "grant" });
 		} else {
-			box.attr({ fill: baseColor, stroke: "none"});
+			box.attr({ fill: lightColor, stroke: "none"});
 		}
 	}
 
@@ -148,7 +183,7 @@ var graphOccupations = function(paper, xpos, ypos, chapterID) {
 
 		if (occupations[i] === 0) {
 			box = paper.rect(xpos, newy, width, 10);
-			box.attr({ fill: baseColor, stroke: "none", title: "0%" })
+			box.attr({ fill: lightColor, stroke: "none", title: "0%" })
 			
 			label = paper.text(xpos + 50, newy + 2, labelText);
 			label.attr({ "font-size": 16, "text-anchor": "start" });
@@ -157,7 +192,7 @@ var graphOccupations = function(paper, xpos, ypos, chapterID) {
 			newy = newy + spacer + 10;
 		} else {
 			box = paper.rect(xpos, newy, width, occupations[i]);
-			box.attr({ fill: accentColor, stroke: "none", title: percent[i] + "%" });
+			box.attr({ fill: darkColor, stroke: "none", title: percent[i] + "%" });
 			
 			label = paper.text(xpos + 50, newy + occupations[i] - 8, labelText);
 			label.attr({ "font-size": 16, "text-anchor": "start" });

@@ -6,8 +6,10 @@ $(document).ready(function() {
 
 	// global variable for our data, because Tom said it was ok
 	chapter_list = [];
-	accentColor = "rgb(50,50,50)";
-	baseColor = "rgb(200,200,200)";
+	darkColor = "rgb(50,50,50)";
+	mediumColor = "rgb(100,100,100)";
+	lightColor = "rgb(200,200,200)";
+	pinkColor = "rgb(252,63,117)"; // the "official" AF pink
 
 	$.getJSON("http://spreadsheets.google.com/feeds/list/0ArWU2T0HEMrldGxLeHVFYmM2VVhvMktFRVJwVGtVOHc/od6/public/values?alt=json-in-script&callback=?",
 		function(data) {
@@ -42,9 +44,10 @@ $(document).ready(function() {
 			// params: x, y, width, height
 			graphPaper = new Raphael(document.getElementById("canvas"), $("#canvas").width(), $("#canvas").height());
 			mapPaper = new Raphael(document.getElementById("map"), $("#map").width(), $("#map").height());
+			namePaper = new Raphael(document.getElementById("titling"), $("#titling").width(), $("#titling").height());
 			
 			mapCities();
-			displayData(1);
+			displayData("Boston");
 	});
 
 	$("wrapper").click(function() {
