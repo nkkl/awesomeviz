@@ -9,9 +9,11 @@ var mapCities = function(paper) {
 			cities[index] = mapPaper.circle(xpos, ypos, 4);
 			cities[index].attr({ fill: "black", stroke: "none", title: chapter_list[index]["name"] });
 			cities[index].cityName = chapter_list[index]["name"];
+			cities[index].cityID = index;
 
+			// on click, plot data for that city
 			cities[index].click(function() {
-				console.log(this.cityName);
+				displayData(this.cityID);
 			});
 		}
 	}

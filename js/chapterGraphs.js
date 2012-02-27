@@ -1,3 +1,12 @@
+var displayData = function(chapterID) {
+	graphPaper.clear();
+	// generate graphs
+	// params: paper, xpos, ypos, chapterID
+	graphGender(graphPaper, 0, 0, chapterID);
+	graphGrants(graphPaper, 0, 200, chapterID);
+	graphOccupations(graphPaper, 250, 0, chapterID);
+}
+
 // graph the men and women of each chapter, compared to the global average
 var graphGender = function(paper, xpos, ypos, chapterID) {
 	// parameter definitions
