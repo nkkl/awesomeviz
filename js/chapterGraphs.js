@@ -100,27 +100,35 @@ var graphGender = function(paper, xpos, ypos, chapterID) {
 
 // graph the number of grants funded by a chapter
 var graphGrants = function(paper, xpos, ypos, chapterID) {
-	// get the total number of grants awarded
-	var localGrants = chapter_list[chapterID]["grants"];
-	var totalGrants = chapter_list[0]["grants"];
+	var cityName = chapter_list[chapterID]["name"];
+	var totalGrants = grant_list.length;
 
-	// position and size of rectangles
+	// position and size of markers
 	var box;
 	var newx;
 	var newy = ypos + 20;
 	var side = 15;
 	var spacer = 5;
 	var rowLength = 10; // number of rectangles per row
+	var title;
 
 	for (i=0;i<totalGrants;i++) {
 		newx = xpos + (i%rowLength)*(side + spacer);
 		newy = ypos + Math.floor(i/rowLength)*(side + spacer);
 
 		box = paper.circle(newx + side/2, newy, side/2);
-		if (i<localGrants) {
-			box.attr({ fill: darkColor, stroke: "none", title: "grant" });
+
+		if (grant_list[i]["name"].length === 0) {
+			title = "(untitled)";
 		} else {
-			box.attr({ fill: lightColor, stroke: "none"});
+			title = grant_list[i]["name"];
+		}
+
+		if (grant_list[i]["chapter"] === cityName) {
+			box.attr({ fill: darkColor, stroke: "none", title: title });
+		} else {
+			title += (", " + grant_list[i]["chapter"]);
+			box.attr({ fill: lightColor, stroke: "none", title: title });
 		}
 	}
 
