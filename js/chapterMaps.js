@@ -1,7 +1,7 @@
 var displayMaps = function(year, city) {
 	mapPaper.clear();
 	
-	mapCities(year);
+	city = mapCities(year, city);
 	mapTimeline(year);
 }
 
@@ -17,6 +17,7 @@ var mapCities = function(year, city) {
 			if (chapter_list[index]["founding"] <= year) {
 				cities[index] = mapPaper.circle(xpos, ypos, 5);
 				cities[index].attr({ stroke: "none", title: chapter_list[index]["name"] });
+				
 				if (chapter_list[index]["name"] === city) {
 					cities[index].attr({ fill: pinkColor });
 				} else {
