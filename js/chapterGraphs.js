@@ -23,11 +23,11 @@ var displayData = function(chapterName) {
 }
 
 var addTitling = function(paper, chapterID) {
-	var mainTitle = paper.text(0, 25, "North America");
-	mainTitle.attr({ "font-size": 24, "text-anchor": "start" });
+	var mainTitle = paper.text(0, 25, "Global Awesome » North America » ");
+	mainTitle.attr({ "font-size": 30, "text-anchor": "start" });
 
-	var localTitle = paper.text(500, 25, "Awesome " + chapter_list[chapterID]["name"]);
-	localTitle.attr({ "font-size": 24, "text-anchor": "start" });
+	var localTitle = paper.text(477, 25, chapter_list[chapterID]["name"])
+	localTitle.attr({ "font-size": 30, "text-anchor": "start", fill: pinkColor });
 }
 
 // graph the men and women of each chapter, compared to the global average
@@ -42,8 +42,6 @@ var graphGender = function(paper, xpos, ypos, chapterID) {
 	// get the number of men and women in this chapter and globally
 	var women = chapter_list[chapterID]["women"];
 	var men = chapter_list[chapterID]["men"];
-	var womenGlobal = chapter_list[0]["women"];
-	var menGlobal = chapter_list[0]["men"];
 	
 	// find the size of the largest chapter for use as a scale factor
 	var largestChapter = 0;
@@ -80,16 +78,9 @@ var graphGender = function(paper, xpos, ypos, chapterID) {
 	// reset x position!
 	newx = xpos;
 	newy += boxHeight + 15;
-	box = paper.rect(newx, newy, Math.round(width * menGlobal/largestChapter), boxHeight);
-	box.attr({ fill: mediumColor, stroke: "none", title: menGlobal + " men"});
-	newx += Math.round(width * menGlobal/largestChapter);
-	box = paper.rect(newx, newy, Math.round(width * womenGlobal/largestChapter), boxHeight);
-	box.attr({ fill: darkColor, stroke: "none", title: womenGlobal + " women" });
 	// if you like it put a label on it
-	var avgLabel = paper.text(xpos + 5, newy+35, "global avg.");
-	avgLabel.attr({ "font-size": 16, "text-anchor": "start", fill: "white" });
-	var avgDesc = paper.text(width - 10, newy+35, "= " + (womenGlobal+menGlobal) + " trustees");
-	avgDesc.attr({ "font-size": 16, "text-anchor": "end" });
+	var chapterDesc = paper.text(newx, newy+15, "There are " + (women + men) + " trustees\nin " + chapter_list[chapterID]["name"]);
+	chapterDesc.attr({ "font-size": 16, "text-anchor": "start" });
 
 	// add graph label and tooltips
 	// params: x, y, text (use \n for line breaks)
