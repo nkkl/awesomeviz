@@ -1,7 +1,7 @@
-var displayMaps = function(year) {
+var displayMaps = function(year, city) {
 	mapPaper.clear();
 	
-	mapCities(year, "Boston");
+	mapCities(year);
 	mapTimeline(year);
 }
 
@@ -53,35 +53,35 @@ var mapTimeline = function(year) {
 	var boxWidth = Math.round((width - (buffer * 12))/11);
 	var newx = 0 + buffer;
 	var boxes = [];
+	var title;
 
 	var dates = [200909, 200912, 201003, 201006, 201009, 201012, 201103, 201106, 201109, 201112, 201203];
 
 	// do things
 	for (i=0;i<11;i++) {
-		boxes[i] = mapPaper.rect(newx,ypos-20,boxWidth,20);
+		boxes[i] = mapPaper.rect(newx,ypos,boxWidth,20);
 		boxes[i].year = dates[i];
-		// var title;
 
-		// switch(dates[i].toString().substring(4,6)) {
-		// 	case "03":
-		// 		title = "Jan - Mar";
-		// 		break;
-		// 	case "06":
-		// 		title = "Apr - Jun";
-		// 		break;
-		// 	case "09":
-		// 		title = "Jul - Sep";
-		// 		break;
-		// 	case "12":
-		// 		title = "Oct - Dec";
-		// 		break;
-		// }
+		switch(year.toString().substring(4,6)) {
+			case "03":
+				title = "January - March";
+				break;
+			case "06":
+				title = "April - June";
+				break;
+			case "09":
+				title = "July - September";
+				break;
+			case "12":
+				title = "October - December";
+				break;
+		}
 
-		// title += ", " + dates[i].toString().substring(0,4);
-		// boxes[i].attr({ title: title });
+		title += ", " + year.toString().substring(0,4);
+
 		
 		if (boxes[i].year === year) {
-			boxes[i].attr({ stroke: "none", fill: darkColor });
+			boxes[i].attr({ stroke: "none", fill: "black" });
 		} else if (boxes[i].year < year) {
 			boxes[i].attr({ stroke: "none", fill: mediumColor });
 		} else {
@@ -94,4 +94,7 @@ var mapTimeline = function(year) {
 
 		newx += boxWidth + buffer;
 	}
+	
+	var titleText = mapPaper.text(450, ypos-20, title);
+	titleText.attr({ "font-size": 16, "text-anchor": "end" });
 }

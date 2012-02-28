@@ -66,7 +66,7 @@ $(document).ready(function() {
 				mapPaper = new Raphael(document.getElementById("map"), $("#map").width(), $("#map").height());
 				namePaper = new Raphael(document.getElementById("titling"), $("#titling").width(), $("#titling").height());
 				
-				displayMaps(200909);
+				displayMaps(200909, "Boston");
 				displayData("Boston");
 		});
 	}
