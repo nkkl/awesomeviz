@@ -97,5 +97,5 @@ var mapTimeline = function(year) {
 	}
 	
 	var titleText = mapPaper.text(450, ypos-20, title);
-	titleText.attr({ "font-size": 16, "text-anchor": "end" });
+	titleText.attr({ "font-size": "16px", "text-anchor": "end" });
 }

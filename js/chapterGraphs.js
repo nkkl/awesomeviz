@@ -24,10 +24,10 @@ var displayData = function(chapterName) {
 
 var addTitling = function(paper, chapterID) {
 	var mainTitle = paper.text(0, 25, "Global Awesome » North America » ");
-	mainTitle.attr({ "font-size": 30, "text-anchor": "start" });
+	mainTitle.attr({ "font-size": "30px", "text-anchor": "start" });
 
 	var localTitle = paper.text(477, 25, chapter_list[chapterID]["name"])
-	localTitle.attr({ "font-size": 30, "text-anchor": "start", fill: pinkColor });
+	localTitle.attr({ "font-size": "30px", "text-anchor": "start", fill: pinkColor });
 }
 
 // graph the men and women of each chapter, compared to the global average
@@ -61,17 +61,17 @@ var graphGender = function(paper, xpos, ypos, chapterID) {
 	newx += Math.round(width * men/largestChapter);
 	// label the men
 	var manLabel = paper.text(newx - 5, newy + 35, "m");
-	manLabel.attr({ "font-size": 16, "text-anchor": "end", fill: "white" });
+	manLabel.attr({ "font-size": "16px", "text-anchor": "end", fill: "white" });
 	// graph the women
 	box = paper.rect(newx, newy, Math.round(width * women/largestChapter), boxHeight);
 	box.attr({ fill: darkColor, stroke: "none", title: women + " women" });
 	// label the women
 	if (women > 1) {
 		var womanLabel = paper.text(newx + Math.round(width * women/largestChapter) - 5, newy + 35, "w");
-		womanLabel.attr({ "font-size": 16, "text-anchor": "end", fill: "white" });
+		womanLabel.attr({ "font-size": "16px", "text-anchor": "end", fill: "white" });
 	} else {
 		var womanLabel = paper.text(newx + 10, newy + 35, "w");
-		womanLabel.attr({ "font-size": 16, "text-anchor": "start" });
+		womanLabel.attr({ "font-size": "16px", "text-anchor": "start" });
 	}
 	
 	// graph our global average
@@ -80,12 +80,12 @@ var graphGender = function(paper, xpos, ypos, chapterID) {
 	newy += boxHeight + 15;
 	// if you like it put a label on it
 	var chapterDesc = paper.text(newx, newy+15, "There are " + (women + men) + " trustees\nin " + chapter_list[chapterID]["name"]);
-	chapterDesc.attr({ "font-size": 16, "text-anchor": "start" });
+	chapterDesc.attr({ "font-size": "16px", "text-anchor": "start" });
 
 	// add graph label and tooltips
 	// params: x, y, text (use \n for line breaks)
 	var title = paper.text(xpos, ypos+12, "Men & Women");
-	title.attr({ "font-size": 24, "text-anchor": "start" });
+	title.attr({ "font-size": "24px", "text-anchor": "start" });
 	addTooltips();
 }
 
@@ -97,7 +97,7 @@ var graphGrants = function(paper, xpos, ypos, chapterID) {
 	// position and size of markers
 	var box;
 	var newx;
-	var newy = ypos + 20;
+	var newy;
 	var side = 15;
 	var spacer = 5;
 	var rowLength = 10; // number of rectangles per row
@@ -105,7 +105,7 @@ var graphGrants = function(paper, xpos, ypos, chapterID) {
 
 	for (i=0;i<totalGrants;i++) {
 		newx = xpos + (i%rowLength)*(side + spacer);
-		newy = ypos + Math.floor(i/rowLength)*(side + spacer);
+		newy = ypos + 5 + Math.floor(i/rowLength)*(side + spacer);
 
 		box = paper.circle(newx + side/2, newy, side/2);
 
@@ -126,7 +126,7 @@ var graphGrants = function(paper, xpos, ypos, chapterID) {
 	// add text labels and tooltips
 	// params: x, y, text (use \n for line breaks)
 	var title = paper.text(xpos, ypos - 20, "Grants Awarded");
-	title.attr({ "font-size": 24, "text-anchor": "start" });
+	title.attr({ "font-size": "24px", "text-anchor": "start" });
 	addTooltips();
 }
 
@@ -185,7 +185,7 @@ var graphOccupations = function(paper, xpos, ypos, chapterID) {
 			box.attr({ fill: lightColor, stroke: "none", title: "0%" })
 			
 			label = paper.text(xpos + 50, newy + 2, labelText);
-			label.attr({ "font-size": 16, "text-anchor": "start" });
+			label.attr({ "font-size": "16px", "text-anchor": "start" });
 
 			// increment y position
 			newy = newy + spacer + 10;
@@ -194,7 +194,7 @@ var graphOccupations = function(paper, xpos, ypos, chapterID) {
 			box.attr({ fill: darkColor, stroke: "none", title: percent[i] + "%" });
 			
 			label = paper.text(xpos + 50, newy + occupations[i] - 8, labelText);
-			label.attr({ "font-size": 16, "text-anchor": "start" });
+			label.attr({ "font-size": "16px", "text-anchor": "start" });
 			
 			// increment y position
 			newy = newy + spacer + occupations[i];
@@ -205,7 +205,7 @@ var graphOccupations = function(paper, xpos, ypos, chapterID) {
 	// add text labels and tooltips
 	// params: x, y, text (use \n for line breaks)
 	var title = paper.text(xpos, ypos + 12, "Trustee Occupations");
-	title.attr({ "font-size": 24, "text-anchor": "start" });
+	title.attr({ "font-size": "24px", "text-anchor": "start" });
 	addTooltips();
 }
 
