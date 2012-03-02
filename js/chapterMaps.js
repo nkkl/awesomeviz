@@ -89,7 +89,7 @@ var mapTimeline = function(year) {
 			boxes[i].attr({ stroke: "none", fill: lightColor });
 		}
 
-		boxes[i].click(function() {
+		boxes[i].hover(function() {
 			displayMaps(this.year);
 		});
 
