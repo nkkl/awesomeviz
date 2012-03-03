@@ -23,10 +23,10 @@ var displayData = function(chapterName) {
 }
 
 var addTitling = function(paper, chapterID) {
-	var mainTitle = paper.text(0, 25, "Global Awesome » North America » ");
+	var mainTitle = paper.text(0, 25, "Global Awesome » North America »");
 	mainTitle.attr({ "font-size": "30px", "text-anchor": "start" });
 
-	var localTitle = paper.text(477, 25, chapter_list[chapterID]["name"])
+	var localTitle = paper.text(mainTitle.getBBox().width + 10, 25, chapter_list[chapterID]["name"])
 	localTitle.attr({ "font-size": "30px", "text-anchor": "start", fill: pinkColor });
 }
 
@@ -105,7 +105,7 @@ var graphGrants = function(paper, xpos, ypos, chapterID) {
 
 	for (i=0;i<totalGrants;i++) {
 		newx = xpos + (i%rowLength)*(side + spacer);
-		newy = ypos + 5 + Math.floor(i/rowLength)*(side + spacer);
+		newy = ypos + 12 + 5 + Math.floor(i/rowLength)*(side + spacer);
 
 		box = paper.circle(newx + side/2, newy, side/2);
 
@@ -125,7 +125,7 @@ var graphGrants = function(paper, xpos, ypos, chapterID) {
 
 	// add text labels and tooltips
 	// params: x, y, text (use \n for line breaks)
-	var title = paper.text(xpos, ypos - 20, "Grants Awarded");
+	var title = paper.text(xpos, ypos - 12, "Grants Awarded");
 	title.attr({ "font-size": "24px", "text-anchor": "start" });
 	addTooltips();
 }
