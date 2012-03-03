@@ -18,8 +18,8 @@ var displayData = function(chapterName) {
 	// generate graphs
 	// params: paper, xpos, ypos, chapterID
 	graphGender(graphPaper, 0, 0+25, chapterID);
-	graphGrants(graphPaper, 0, 225+25, chapterID);
-	graphOccupations(graphPaper, 200, 0+25, chapterID);
+	graphGrants(graphPaper, 0, 225+40, chapterID);
+	graphOccupations(graphPaper, 200+25, 0+25, chapterID);
 }
 
 var addTitling = function(paper, chapterID) {
@@ -132,7 +132,7 @@ var graphGrants = function(paper, xpos, ypos, chapterID) {
 	// params: x, y, text (use \n for line breaks)
 	var title = paper.text(xpos, ypos - 12, "Grants Awarded");
 	title.attr({ "font-size": "24px", "text-anchor": "start" });
-	var totalDollars = paper.text(xpos + 325, ypos + 100, "A total of $" + cityGrants + ",000\nhas been awarded by\n" + cityName);
+	var totalDollars = paper.text(xpos + 325, ypos + 100, "AF " + cityName + "\nhas given away\n$" + cityGrants + ",000!");
 	totalDollars.attr({ "font-size": "16px", "text-anchor": "start" });
 	addTooltips();
 }
@@ -140,12 +140,14 @@ var graphGrants = function(paper, xpos, ypos, chapterID) {
 // graph the occupations of each chapter
 var graphOccupations = function(paper, xpos, ypos, chapterID) {
 	// pull everything into variables to make life easier
-	var occupations = [];
-	occupations[0] = chapter_list[chapterID]["ebang"];
-	occupations[1] = chapter_list[chapterID]["tech"];
-	occupations[2] = chapter_list[chapterID]["education"];
-	occupations[3] = chapter_list[chapterID]["philanthropy"];
-	occupations[4] = chapter_list[chapterID]["other"];
+	var occupations = chapter_list[chapterID]["jobTitles"];
+	var quantities = [];
+
+	// copy the list over, or the pie chart function will modify the original!
+	// (what the heck, graphael)
+	for (i=0;i<chapter_list[chapterID]["jobNums"].length;i++) {
+		quantities[i] = chapter_list[chapterID]["jobNums"][i];
+	}
 
 	// position and size of pie chart
 	var rad = 70;
@@ -154,9 +156,8 @@ var graphOccupations = function(paper, xpos, ypos, chapterID) {
 	var label;
 	var labelText;
 	var colorArray = ["rgb(0,0,0)", "rgb(50,50,50)", "rgb(100,100,100)", "rgb(150,150,150)", "rgb(200,200,200)"];
-	var labels = ["entrepreneurship", "boogle", "cat juggling", "traditional philanthropy", "e"];
 
-	var pie = paper.piechart(newx, newy, rad, occupations, { legend: labels, legendpos: "east", colors: colorArray });
+	var pie = paper.piechart(newx, newy, rad, quantities, { legend: occupations, legendpos: "east", colors: colorArray });
 
 	// add text labels and tooltips
 	// params: x, y, text (use \n for line breaks)

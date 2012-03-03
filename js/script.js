@@ -50,15 +50,13 @@ $(document).ready(function() {
 				      grants: parseInt(entry["gsx$grants"].$t),
 				      dollars: parseInt(entry["gsx$dollars"].$t),
 				      // trustee occupations
-				      ebang: parseInt(entry["gsx$ebang"].$t),
-				      tech: parseInt(entry["gsx$tech"].$t),
-				      education: parseInt(entry["gsx$education"].$t),
-				      philanthropy: parseInt(entry["gsx$philanthropy"].$t),
-				      other: parseInt(entry["gsx$other"].$t),
-				      list: entry["gsx$list"]
-				    };
-				     
-				    console.log(typeof chapter.list);
+				      jobTitles: entry["gsx$jobtitles"].$t.split(','),
+				      jobNums: entry["gsx$jobnumbers"].$t.split(',')
+  				    };
+
+  				    for (j=0;j<chapter.jobNums.length;j++) {
+						chapter.jobNums[j] = parseInt(chapter.jobNums[j]);
+					}
 
 				    chapter_list.push(chapter);
 				}
