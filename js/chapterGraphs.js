@@ -18,8 +18,8 @@ var displayData = function(chapterName) {
 	// generate graphs
 	// params: paper, xpos, ypos, chapterID
 	graphGender(graphPaper, 0, 0, chapterID);
-	graphGrants(graphPaper, 0, 200, chapterID);
-	graphOccupations(graphPaper, 250, 0, chapterID);
+	graphGrants(graphPaper, 0, 225, chapterID);
+	graphOccupations(graphPaper, 200, 0, chapterID);
 }
 
 var addTitling = function(paper, chapterID) {
@@ -100,8 +100,9 @@ var graphGrants = function(paper, xpos, ypos, chapterID) {
 	var newy;
 	var side = 15;
 	var spacer = 5;
-	var rowLength = 10; // number of rectangles per row
+	var rowLength = 15; // number of rectangles per row
 	var title;
+	var cityGrants = 0;
 
 	for (i=0;i<totalGrants;i++) {
 		newx = xpos + (i%rowLength)*(side + spacer);
@@ -117,6 +118,7 @@ var graphGrants = function(paper, xpos, ypos, chapterID) {
 
 		if (grant_list[i]["chapter"] === cityName) {
 			box.attr({ fill: darkColor, stroke: "none", title: title });
+			cityGrants++;
 		} else {
 			title += (", " + grant_list[i]["chapter"]);
 			box.attr({ fill: lightColor, stroke: "none", title: title });
@@ -127,6 +129,8 @@ var graphGrants = function(paper, xpos, ypos, chapterID) {
 	// params: x, y, text (use \n for line breaks)
 	var title = paper.text(xpos, ypos - 12, "Grants Awarded");
 	title.attr({ "font-size": "24px", "text-anchor": "start" });
+	var totalDollars = paper.text(xpos + 325, ypos + 100, "A total of $" + cityGrants + ",000\nhas been awarded by\n" + cityName);
+	totalDollars.attr({ "font-size": "16px", "text-anchor": "start" });
 	addTooltips();
 }
 
@@ -139,68 +143,17 @@ var graphOccupations = function(paper, xpos, ypos, chapterID) {
 	occupations[2] = chapter_list[chapterID]["education"];
 	occupations[3] = chapter_list[chapterID]["philanthropy"];
 	occupations[4] = chapter_list[chapterID]["other"];
-	var total = 0;
 
-	var percent = [];
-
-	for (i=0;i<occupations.length;i++) {
-		total += occupations[i];
-	}
-
-	// position and size of rectangle
-	var box;
-	var newy = ypos + 25;
-	var width = 40;
-	var spacer = 3;
+	// position and size of pie chart
+	var rad = 70;
+	var newx = xpos + rad;
+	var newy = ypos + rad + 24 + 10;
 	var label;
 	var labelText;
+	var colorArray = ["rgb(0,0,0)", "rgb(50,50,50)", "rgb(100,100,100)", "rgb(150,150,150)", "rgb(200,200,200)"];
+	var labels = ["entrepreneurship", "boogle", "cat juggling", "traditional philanthropy", "e"];
 
-	var height = 400;
-
-	// normalize values and graph rectangles
-	for (i=0;i<occupations.length;i++) {
-		percent[i] = Math.round(occupations[i]/total * 1000)/10;
-		occupations[i] = Math.round((occupations[i]/total)*height);
-
-		// choose label
-		switch(i) {
-			case 0:
-				labelText = "entrepreneurship";
-				break;
-			case 1:
-				labelText = "technology";
-				break;
-			case 2:
-				labelText = "education";
-				break;
-			case 3:
-				labelText = "philanthropy";
-				break;
-			default:
-				labelText = "other";
-		}
-
-		if (occupations[i] === 0) {
-			box = paper.rect(xpos, newy, width, 10);
-			box.attr({ fill: lightColor, stroke: "none", title: "0%" })
-			
-			label = paper.text(xpos + 50, newy + 2, labelText);
-			label.attr({ "font-size": "16px", "text-anchor": "start" });
-
-			// increment y position
-			newy = newy + spacer + 10;
-		} else {
-			box = paper.rect(xpos, newy, width, occupations[i]);
-			box.attr({ fill: darkColor, stroke: "none", title: percent[i] + "%" });
-			
-			label = paper.text(xpos + 50, newy + occupations[i] - 8, labelText);
-			label.attr({ "font-size": "16px", "text-anchor": "start" });
-			
-			// increment y position
-			newy = newy + spacer + occupations[i];
-		}
-
-	}
+	var pie = paper.piechart(newx, newy, rad, occupations, { legend: labels, legendpos: "east", colors: colorArray });
 
 	// add text labels and tooltips
 	// params: x, y, text (use \n for line breaks)

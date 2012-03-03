@@ -60,7 +60,16 @@ var mapTimeline = function(year) {
 
 	// do things
 	for (i=0;i<11;i++) {
-		boxes[i] = mapPaper.rect(newx,ypos,boxWidth,20);
+		var height = 0;
+		
+		for (j=0;j<chapter_list.length;j++) {
+			console.log(chapter_list[j]["founding"] + " " + dates[i]);
+			if (chapter_list[j]["founding"] <= dates[i]) {
+				height += 5;
+			}
+		}
+
+		boxes[i] = mapPaper.rect(newx,ypos-height+12,boxWidth,height);
 		boxes[i].year = dates[i];
 
 		switch(year.toString().substring(4,6)) {
@@ -96,6 +105,6 @@ var mapTimeline = function(year) {
 		newx += boxWidth + buffer;
 	}
 	
-	var titleText = mapPaper.text(450, ypos-20, title);
+	var titleText = mapPaper.text(450, ypos+20, title);
 	titleText.attr({ "font-size": "16px", "text-anchor": "end" });
 }
