@@ -63,7 +63,6 @@ var mapTimeline = function(year) {
 		var height = 0;
 		
 		for (j=0;j<chapter_list.length;j++) {
-			console.log(chapter_list[j]["founding"] + " " + dates[i]);
 			if (chapter_list[j]["founding"] <= dates[i]) {
 				height += 5;
 			}

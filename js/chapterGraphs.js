@@ -17,9 +17,9 @@ var displayData = function(chapterName) {
 
 	// generate graphs
 	// params: paper, xpos, ypos, chapterID
-	graphGender(graphPaper, 0, 0, chapterID);
-	graphGrants(graphPaper, 0, 225, chapterID);
-	graphOccupations(graphPaper, 200, 0, chapterID);
+	graphGender(graphPaper, 0, 0+25, chapterID);
+	graphGrants(graphPaper, 0, 225+25, chapterID);
+	graphOccupations(graphPaper, 200, 0+25, chapterID);
 }
 
 var addTitling = function(paper, chapterID) {
@@ -79,8 +79,11 @@ var graphGender = function(paper, xpos, ypos, chapterID) {
 	newx = xpos;
 	newy += boxHeight + 15;
 	// if you like it put a label on it
-	var chapterDesc = paper.text(newx, newy+15, "There are " + (women + men) + " trustees\nin " + chapter_list[chapterID]["name"]);
+	var chapterDesc = paper.text(newx, newy+15, "There are " + (women + men) + " trustees\nin " + chapter_list[chapterID]["name"] + ".");
 	chapterDesc.attr({ "font-size": "16px", "text-anchor": "start" });
+
+	var globalDesc = paper.text(newx, newy+15 + 50, "The global average is\n14 trustees per chapter.");
+	globalDesc.attr({ "font-size": "16px", "text-anchor": "start" });
 
 	// add graph label and tooltips
 	// params: x, y, text (use \n for line breaks)

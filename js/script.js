@@ -54,8 +54,11 @@ $(document).ready(function() {
 				      tech: parseInt(entry["gsx$tech"].$t),
 				      education: parseInt(entry["gsx$education"].$t),
 				      philanthropy: parseInt(entry["gsx$philanthropy"].$t),
-				      other: parseInt(entry["gsx$other"].$t)
+				      other: parseInt(entry["gsx$other"].$t),
+				      list: entry["gsx$list"]
 				    };
+				     
+				    console.log(typeof chapter.list);
 
 				    chapter_list.push(chapter);
 				}
