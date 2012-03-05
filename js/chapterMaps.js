@@ -5,7 +5,7 @@ var displayMaps = function(year, city) {
 	mapTimeline(year);
 }
 
-var mapCities = function(year, city) {
+var mapCities = function(year) {
 	
 	var cities = [];
 
@@ -18,7 +18,7 @@ var mapCities = function(year, city) {
 				cities[index] = mapPaper.circle(xpos, ypos, 5);
 				cities[index].attr({ stroke: "none", title: chapter_list[index]["name"] });
 				
-				if (chapter_list[index]["name"] === city) {
+				if (chapter_list[index]["name"] === activeCity) {
 					cities[index].attr({ fill: pinkColor });
 				} else {
 					cities[index].attr({ fill: "black" });
@@ -39,6 +39,7 @@ var mapCities = function(year, city) {
 					this.toFront();
 					this.attr({ fill: pinkColor });
 					displayData(this.cityName);
+					activeCity = this.cityName;
 				});
 			}
 		}

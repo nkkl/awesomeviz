@@ -7,6 +7,7 @@ $(document).ready(function() {
 	// global variable for our data, because Tom said it was ok
 	chapter_list = [];
 	grant_list = [];
+	activeCity = "Boston";
 	darkColor = "rgb(50,50,50)";
 	mediumColor = "rgb(100,100,100)";
 	lightColor = "rgb(200,200,200)";
@@ -67,8 +68,8 @@ $(document).ready(function() {
 				mapPaper = new Raphael(document.getElementById("map"), $("#map").width(), $("#map").height());
 				namePaper = new Raphael(document.getElementById("titling"), $("#titling").width(), $("#titling").height());
 				
-				displayMaps(200909, "Boston");
-				displayData("Boston");
+				displayMaps(200909);
+				displayData(activeCity);
 		});
 	}
 
