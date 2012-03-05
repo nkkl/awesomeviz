@@ -131,42 +131,46 @@ var graphGrants = function(paper, xpos, ypos, chapterID) {
 		}
 	}
 
-	localGrants[0].attr({ fill: pinkColor });
+	$("div#grantDesc").text("");
 
-	if (grant_list[localGrants[0].grantIndex]["name"] === "") {
-		var grantTitle = paper.text(xpos, newy + 35, "Untitled");
-	} else {
-		var grantTitle = paper.text(xpos, newy + 35, grant_list[localGrants[0].grantIndex]["name"]);	
-	}
-	grantTitle.attr({ "font-size": "16px", "text-anchor": "start", "font-weight": "bold" });
+	if (localGrants.length >= 1) {
+		localGrants[0].attr({ fill: pinkColor });
 
-	if (grant_list[localGrants[0].grantIndex]["description"] === "") {
-		var grantDesc = paper.text(xpos, newy + 60, "Unfortunately, we don't have more information about this grant.");
-	} else {
-		var grantDesc = paper.text(xpos, newy + 60, grant_list[localGrants[0].grantIndex]["description"]);
-	}
-	grantDesc.attr({ "font-size": "16px", "text-anchor": "start" });
+		if (grant_list[localGrants[0].grantIndex]["name"] === "") {
+			var grantTitle = paper.text(xpos, newy + 35, "Untitled");
+		} else {
+			var grantTitle = paper.text(xpos, newy + 35, grant_list[localGrants[0].grantIndex]["name"]);	
+		}
+		grantTitle.attr({ "font-size": "16px", "text-anchor": "start", "font-weight": "bold" });
 
-	for (i=0;i<localGrants.length;i++) {
-		localGrants[i].click(function() {
-			for (i=0;i<localGrants.length;i++) {
-				localGrants[i].attr({ fill: darkColor });
-			}
+		if (grant_list[localGrants[0].grantIndex]["description"] === "") {
+			var grantDesc = "Unfortunately, we don't have more information about this grant.";
+		} else {
+			var grantDesc = grant_list[localGrants[0].grantIndex]["description"];
+		}
+		$("div#grantDesc").text(grantDesc);
 
-			this.attr({ fill: pinkColor });
+		for (i=0;i<localGrants.length;i++) {
+			localGrants[i].click(function() {
+				for (i=0;i<localGrants.length;i++) {
+					localGrants[i].attr({ fill: darkColor });
+				}
 
-			var newTitle = grant_list[this.grantIndex]["name"];
-			var newDesc = grant_list[this.grantIndex]["description"];
-			if (newTitle === "") {
-				newTitle += "Untitled";
-			}
-			if (newDesc === "") {
-				newDesc += "Unfortunately, we don't have more information about this grant.";
-			}
+				this.attr({ fill: pinkColor });
 
-			grantTitle.attr({ text: newTitle });
-			grantDesc.attr({ text: newDesc });
-		});
+				var newTitle = grant_list[this.grantIndex]["name"];
+				var newDesc = grant_list[this.grantIndex]["description"];
+				if (newTitle === "") {
+					newTitle += "Untitled";
+				}
+				if (newDesc === "") {
+					newDesc += "Unfortunately, we don't have more information about this grant.";
+				}
+
+				grantTitle.attr({ text: newTitle });
+				$("div#grantDesc").text(newDesc);
+			});
+		}
 	}
 
 	// add text labels and tooltips

@@ -6,13 +6,16 @@
 
 html {}
 
-body {}
+body {
+	font-family: sans-serif;
+}
 
 #wrapper {
 	width: 1000px;
 	height: 100%;
 	margin: auto;
 	overflow: hidden;
+	position: relative;
 }
 
 #titling {
@@ -33,4 +36,13 @@ body {}
 	width: 500px;
 	height: 550px;
 	margin: auto;
+}
+
+#grantDesc {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	width: 500px;
+	height: 85px;
+	padding: 0;
 }
