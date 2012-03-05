@@ -35,7 +35,7 @@ var graphGender = function(paper, xpos, ypos, chapterID) {
 	// parameter definitions
 	var box;
 	var newx = xpos;
-	var newy = ypos + 35;
+	var newy = ypos + 40;
 	var width = 200;
 	var boxHeight = 50;
 
@@ -103,13 +103,14 @@ var graphGrants = function(paper, xpos, ypos, chapterID) {
 	var newy;
 	var side = 15;
 	var spacer = 5;
-	var rowLength = 15; // number of rectangles per row
+	var rowLength = 25; // number of rectangles per row
 	var title;
-	var cityGrants = 0;
+
+	var localGrants = [];
 
 	for (i=0;i<totalGrants;i++) {
 		newx = xpos + (i%rowLength)*(side + spacer);
-		newy = ypos + 12 + 5 + Math.floor(i/rowLength)*(side + spacer);
+		newy = ypos + 35 + 5 + Math.floor(i/rowLength)*(side + spacer);
 
 		box = paper.circle(newx + side/2, newy, side/2);
 
@@ -121,18 +122,58 @@ var graphGrants = function(paper, xpos, ypos, chapterID) {
 
 		if (grant_list[i]["chapter"] === cityName) {
 			box.attr({ fill: darkColor, stroke: "none", title: title });
-			cityGrants++;
+			var index = localGrants.length;
+			localGrants.push(box);
+			localGrants[index].grantIndex = i;
 		} else {
 			title += (", " + grant_list[i]["chapter"]);
 			box.attr({ fill: lightColor, stroke: "none", title: title });
 		}
 	}
 
+	localGrants[0].attr({ fill: pinkColor });
+
+	if (grant_list[localGrants[0].grantIndex]["name"] === "") {
+		var grantTitle = paper.text(xpos, newy + 35, "Untitled");
+	} else {
+		var grantTitle = paper.text(xpos, newy + 35, grant_list[localGrants[0].grantIndex]["name"]);	
+	}
+	grantTitle.attr({ "font-size": "16px", "text-anchor": "start", "font-weight": "bold" });
+
+	if (grant_list[localGrants[0].grantIndex]["description"] === "") {
+		var grantDesc = paper.text(xpos, newy + 60, "Unfortunately, we don't have more information about this grant.");
+	} else {
+		var grantDesc = paper.text(xpos, newy + 60, grant_list[localGrants[0].grantIndex]["description"]);
+	}
+	grantDesc.attr({ "font-size": "16px", "text-anchor": "start" });
+
+	for (i=0;i<localGrants.length;i++) {
+		localGrants[i].click(function() {
+			for (i=0;i<localGrants.length;i++) {
+				localGrants[i].attr({ fill: darkColor });
+			}
+
+			this.attr({ fill: pinkColor });
+
+			var newTitle = grant_list[this.grantIndex]["name"];
+			var newDesc = grant_list[this.grantIndex]["description"];
+			if (newTitle === "") {
+				newTitle += "Untitled";
+			}
+			if (newDesc === "") {
+				newDesc += "Unfortunately, we don't have more information about this grant.";
+			}
+
+			grantTitle.attr({ text: newTitle });
+			grantDesc.attr({ text: newDesc });
+		});
+	}
+
 	// add text labels and tooltips
 	// params: x, y, text (use \n for line breaks)
 	var title = paper.text(xpos, ypos - 12, "Grants Awarded");
 	title.attr({ "font-size": "24px", "text-anchor": "start" });
-	var totalDollars = paper.text(xpos + 325, ypos + 100, "AF " + cityName + "\nhas given away\n$" + cityGrants + ",000!");
+	var totalDollars = paper.text(xpos, ypos + 20, "AF " + cityName + " has given away a total of $" + chapter_list[chapterID]["dollars"] + "!");
 	totalDollars.attr({ "font-size": "16px", "text-anchor": "start" });
 	addTooltips();
 }
@@ -152,7 +193,7 @@ var graphOccupations = function(paper, xpos, ypos, chapterID) {
 	// position and size of pie chart
 	var rad = 70;
 	var newx = xpos + rad;
-	var newy = ypos + rad + 24 + 10;
+	var newy = ypos + rad + 24 + 15;
 	var label;
 	var labelText;
 	var colorArray = ["rgb(0,0,0)", "rgb(50,50,50)", "rgb(100,100,100)", "rgb(150,150,150)", "rgb(200,200,200)"];

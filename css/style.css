@@ -23,7 +23,7 @@ body {}
 #map {
 	float: left;
 	width: 450px;
-	height: 550px;
+	height: 560px;
 	margin: auto;
 	background: url("../img/northAmerica.png") no-repeat center top;
 }

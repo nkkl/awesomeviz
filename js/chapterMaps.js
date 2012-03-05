@@ -48,7 +48,7 @@ var mapCities = function(year, city) {
 }
 
 var mapTimeline = function(year) {
-	var ypos = 500;
+	var ypos = 525;
 	var width = 450;
 	var buffer = 2;
 	var boxWidth = Math.round((width - (buffer * 12))/11);
