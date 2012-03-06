@@ -17,9 +17,9 @@ var displayData = function(chapterName) {
 
 	// generate graphs
 	// params: paper, xpos, ypos, chapterID
-	graphGender(graphPaper, 0, 0+25, chapterID);
-	graphGrants(graphPaper, 0, 225+40, chapterID);
-	graphOccupations(graphPaper, 200+25, 0+25, chapterID);
+	graphGender(graphPaper, 200+100, 0+25, chapterID);
+	graphGrants(graphPaper, 0, 225+50, chapterID);
+	graphOccupations(graphPaper, 0, 0+25, chapterID);
 }
 
 var addTitling = function(paper, chapterID) {
@@ -192,7 +192,7 @@ var graphGrants = function(paper, xpos, ypos, chapterID) {
 
 	// add text labels and tooltips
 	// params: x, y, text (use \n for line breaks)
-	var title = paper.text(xpos, ypos - 12, "Grants Awarded");
+	var title = paper.text(xpos, ypos - 12, "All Grants Awarded");
 	title.attr({ "font-size": "24px", "text-anchor": "start" });
 	var totalDollars = paper.text(xpos, ypos + 20, "AF " + cityName + " has given away a total of $" + chapter_list[chapterID]["dollars"] + "!");
 	totalDollars.attr({ "font-size": "16px", "text-anchor": "start" });
