@@ -4,10 +4,10 @@
 
 $(document).ready(function() {
 
-	// global variable for our data, because Tom said it was ok
-	chapter_list = [];
-	grant_list = [];
-	activeCity = "Boston";
+	// global variables for our data, because Tom said it was ok
+	chapter_list = []; // all the chapters
+	grant_list = []; // all the grants
+	activeCity = "Boston"; // focus starts on Boston, because it was first
 	darkColor = "rgb(50,50,50)";
 	mediumColor = "rgb(100,100,100)";
 	lightColor = "rgb(200,200,200)";
@@ -68,6 +68,7 @@ $(document).ready(function() {
 				mapPaper = new Raphael(document.getElementById("map"), $("#map").width(), $("#map").height());
 				namePaper = new Raphael(document.getElementById("titling"), $("#titling").width(), $("#titling").height());
 				
+				// start at the beginning
 				displayMaps(200909);
 				displayData(activeCity);
 		});
