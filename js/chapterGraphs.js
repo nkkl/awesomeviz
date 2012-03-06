@@ -113,7 +113,7 @@ var graphGrants = function(paper, xpos, ypos, chapterID) {
 	for (i=0;i<totalGrants;i++) {
 		// figure out if we need to change rows or not
 		newx = xpos + (i%rowLength)*(side + spacer);
-		newy = ypos + 35 + 5 + Math.floor(i/rowLength)*(side + spacer);
+		newy = ypos + 30 + 5 + Math.floor(i/rowLength)*(side + spacer);
 
 		marker = paper.circle(newx + side/2, newy + side/2, side/2);
 
@@ -149,9 +149,9 @@ var graphGrants = function(paper, xpos, ypos, chapterID) {
 
 		// plot the title of our first grant
 		if (grant_list[localGrants[0].grantIndex]["name"] === "") {
-			var grantTitle = paper.text(xpos, newy + 35, "Untitled");
+			var grantTitle = paper.text(xpos, newy + 40, "Untitled");
 		} else {
-			var grantTitle = paper.text(xpos, newy + 35, grant_list[localGrants[0].grantIndex]["name"]);	
+			var grantTitle = paper.text(xpos, newy + 40, grant_list[localGrants[0].grantIndex]["name"]);	
 		}
 		grantTitle.attr({ "font-size": "16px", "text-anchor": "start", "font-weight": "bold" });
 
